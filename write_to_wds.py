@@ -24,6 +24,7 @@ if __name__ == "__main__":
     parser.add_argument("--output_root", type=str, required=True, help="Path to the output root directory")
     parser.add_argument("--shuffle", action="store_true", help="Shuffle the dataset")
     parser.add_argument("--min_rows_per_file", type=int, default=10000, help="Minimum number of rows per file")
+    parser.add_argument("--compress", action="store_true", help="Compress the dataset")
     
     args = parser.parse_args()
     
@@ -31,4 +32,4 @@ if __name__ == "__main__":
         data = [json.loads(line) for line in f]
     
     Path(args.output_root).mkdir(parents=True, exist_ok=True)
-    dataset = ray.data.from_items(data).random_shuffle().map(convert).write_webdataset(args.output_root, min_rows_per_file=args.min_rows_per_file)
+    dataset = ray.data.from_items(data).random_shuffle().map(convert).write_webdataset(args.output_root, min_rows_per_file=args.min_rows_per_file, compress=args.compress)
